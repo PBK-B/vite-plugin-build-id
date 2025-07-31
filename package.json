@@ -16,6 +16,10 @@
 		"type": "git",
 		"url": "git+https://github.com/PBK-B/vite-plugin-build-id.git"
 	},
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org",
+		"access": "public"
+	},
 	"files": [
 		"dist"
 	],

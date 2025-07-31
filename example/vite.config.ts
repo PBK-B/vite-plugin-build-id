@@ -7,5 +7,9 @@ import { defineConfig } from 'vite';
 import vitePluginBuildId from 'vite-plugin-build-id';
 
 export default defineConfig({
-	plugins: [vitePluginBuildId({})],
+	plugins: [
+		vitePluginBuildId({
+			filePath: '_bin/builds/latest.json',
+		}),
+	],
 });
