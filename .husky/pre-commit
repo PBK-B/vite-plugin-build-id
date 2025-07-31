@@ -1,0 +1,61 @@
+#!/bin/bash
+
+set -e
+
+# step1
+CODE_DIR=$(git rev-parse --show-toplevel)
+CODE_UI_DIR="$CODE_DIR"
+cd "$CODE_UI_DIR"
+
+staged_files=$(git diff --cached --name-only)
+# only detect ui-related code changes
+has_ui_changes=false
+for file in $staged_files; do
+    if [[ "$CODE_DIR/$file" == "$CODE_UI_DIR/"* ]]; then
+        has_ui_changes=true
+    fi
+done
+if [ "$has_ui_changes" != true ]; then
+    # no ui-related code changes
+    exit 0
+fi
+
+# tips
+printf "\n\e[0m\e[36m\e[1mTips: 亲爱的小伙伴，感谢您的贡献。为了提高项目的可维护性，在提交之前我们需要对将要提交的代码进行一些检查和规范性分析，请稍后…\n\n\e[0m"
+
+# check files task (warn)
+has_vue_warn=true
+ui_codes_files=$(git ls-files --cached)
+for file in $ui_codes_files; do
+    if [[ "$file" == *.[vV][uU][eE] ]]; then
+        printf "[CheckFiles] \033[0;33mWarning file type\033[0m \033[2m\033[4m$CODE_DIR/ui/$file\n\033[0m"
+        has_vue_warn=true
+    fi
+done
+if [ "$has_vue_warn" = true ]; then
+    printf "\033[1m[CheckFiles]\033[0m \033[0;33mWarn: 项目代码中以上不规范文件由于历史遗留问题导致被提交，请维护相关功能的小伙伴尝试使用 TSX 函数式规范及时重构\n\n\033[0m"
+fi
+
+# check files task
+has_vue=false
+for file in $staged_files; do
+    if [[ "$file" == *.[vV][uU][eE] ]]; then
+        printf "[CheckFiles] \033[0;31mWrong file type\033[0m \033[2m\033[4m$CODE_DIR/$file\n\033[0m"
+        has_vue=true
+    fi
+done
+if [ "$has_vue" = true ]; then
+    printf "\033[1m[CheckFiles] \033[0;31mFailed: 尝试提交当前项目不支持的代码文件，请使用 TSX 函数式规范重构以上代码文件再尝试重新提交\n\n\033[0m"
+    exit 1
+fi
+
+# handled as full path
+# staged_files_array=($staged_files)
+# full_paths=("${staged_files_array[@]/#/$CODE_DIR/}")
+
+# eslint task
+# npm run lint "${full_paths[@]}"
+npm run check:lint
+
+# type:check task
+npm run check:type

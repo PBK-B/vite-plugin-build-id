@@ -1,0 +1,18 @@
+#!/bin/bash
+###
+# @Author: Bin
+# @Date: 2025-05-12
+# @FilePath: /lzc-developer-center/.husky/commit-msg
+###
+
+set -e
+
+# step1
+CODE_DIR=$(git rev-parse --show-toplevel)
+CODE_UI_DIR="$CODE_DIR"
+cd "$CODE_UI_DIR"
+
+# tips
+printf "\n\e[0m\e[36m\e[1mTips: 请稍后，正在检查 Git commit messages 规范\n\n\e[0m"
+
+npx --no -- commitlint --edit "$CODE_DIR/$1"
