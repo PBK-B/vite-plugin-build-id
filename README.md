@@ -33,6 +33,22 @@ export default {
 };
 ```
 
+Option
+
+```javascript
+vitePluginBuildId({
+	filePath: '_builds_/latest.json', // default: _builds/latest.json
+});
+```
+
+Outfile
+
+```shell
+cat dist/_builds/latest.json
+
+{"id":"95350fbc-f66c-41ed-9f59-7ee020e1be59","timestamp":1753950850805}
+```
+
 ## Credits
 
 This plugin was inspired by [sumy7/vite-plugin-generate-file](https://github.com/sumy7/vite-plugin-generate-file)、[Alicevia/vite-plugin-generate-config-into-dist](https://github.com/fed/webpack-version-file) and [antfu/vite-plugin-inspect](https://github.com/antfu/vite-plugin-inspect)
